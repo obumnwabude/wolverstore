@@ -106,3 +106,9 @@ exports.updateOrder = (req, res, next) => {
     });
   }).catch(error => res.status(500).json(error));
 };
+
+exports.deleteOrder = (req, res, next) => {
+  res.locals.order.delete()
+    .then(() => res.status(204).end())
+    .catch(error => res.status(500).json(error));
+};
