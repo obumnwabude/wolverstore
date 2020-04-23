@@ -11,7 +11,7 @@ const cartRoutes = require('./routes/cart');
 const port = process.env.PORT || 3000;
 
 // connect to mongodb
-mongoose.connect('mongodb+srv://obum:24PFP3g7v6idbhcM@cluster0-kfvs4.gcp.mongodb.net/ecxbackend-wolverstore', 
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/ecxbackend-wolverstore', 
   {useNewUrlParser: true, useUnifiedTopology: true})
   .then(() => {
     console.log('Successfully connected to MongoDB!');
