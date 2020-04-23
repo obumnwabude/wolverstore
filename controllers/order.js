@@ -27,6 +27,7 @@ exports.createOrder = async (req, res, next) => {
     cartId: res.locals.cart._id,
     referenceId: referenceId,
     customer: {
+      userId: user._id,
       firstName: user.name,
       lastName: user.name,
       email: user.email,

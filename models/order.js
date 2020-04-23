@@ -1,17 +1,11 @@
 const mongoose = require('mongoose');
 const addressSchema = require('./address');
-
-const customerSchema = {
-  firstName: String,
-  lastName: String,
-  phone: String,
-  email: String
-};
+const customerSchema = require('./customer');
 
 module.exports = mongoose.model('Order', new mongoose.Schema({
   cartId: {type: mongoose.Schema.Types.ObjectId, ref: 'Cart', required: true},
   referenceId: {type: String, required: true},
-  customer: customerSchema,
+  customer: {type: customerSchema, required: true},
   date: {type: Date, default: new Date()},
   shippingAddress: {type: addressSchema, required: true},
   status: {

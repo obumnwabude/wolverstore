@@ -1,11 +1,5 @@
 const mongoose = require('mongoose');
-
-const customerSchema = {
-  firstName: String,
-  lastName: String,
-  phone: String,
-  email: String
-};
+const customerSchema = require('./customer');
 
 const storeSchema = {
   storeId: {type: mongoose.Schema.Types.ObjectId, ref: 'Store', required: true},
