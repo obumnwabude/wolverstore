@@ -8,5 +8,6 @@ const orderId = require('../middleware/order-id');
 router.post('/', userId, productId, storeId, auth, reviewCtrl.createReview);
 router.get('/', userId, auth, reviewCtrl.getAllReviews);
 router.get('/:id', reviewId, userId, auth, reviewCtrl.getReview);
+router.put('/:id', reviewId, userId, auth, reviewCtrl.getReview);
 
 module.exports = router;
