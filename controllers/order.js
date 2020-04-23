@@ -59,7 +59,7 @@ exports.createOrder = async (req, res, next) => {
 };
 
 exports.getAllOrders = (req, res, next) => {
-  Order.find({'customer.email': res.locals.user.email})
+  Order.find({'customer.userId': res.locals.user._id})
     .then(orders => res.status(200).json({orders: orders}))
     .catch(error => res.status(500).json(error));
 };

@@ -2,7 +2,8 @@ const User = require('../models/user');
 
 module.exports = (req, res, next) => {
   let userId;
-  if (res.locals.cart != undefined) userId = res.locals.cart.userId;
+  if (res.locals.order != undefined) userId = res.locals.order.customer.userId;
+  else if (res.locals.cart != undefined) userId = res.locals.cart.userId;
   else if (res.locals.store != undefined) userId = res.locals.store.userId;
   else if (req.body.userId) userId = req.body.userId;
   else userId = req.params.id;
