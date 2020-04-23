@@ -43,3 +43,9 @@ exports.createReview = (req, res, next) => {
       review: review
     })).catch(error => res.status(500).json(error));
 };
+
+exports.getAllReviews = (req, res, next) => {
+  Review.find({'customer.userId': res.locals.user._id})
+    .then(reviews => res.status(200).json({reviews: reviews}))
+    .catch(error => res.status(500).json(error));
+};
