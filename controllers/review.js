@@ -49,3 +49,7 @@ exports.getAllReviews = (req, res, next) => {
     .then(reviews => res.status(200).json({reviews: reviews}))
     .catch(error => res.status(500).json(error));
 };
+
+exports.getReview = (req, res, next) => {
+  res.status(200).json(res.locals.review);
+};
