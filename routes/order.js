@@ -6,5 +6,6 @@ const storeId = require('../middleware/store-id');
 const cartId = require('../middleware/cart-id');
 
 router.post('/', cartId, userId, auth, orderCtrl.createOrder);
+router.get('/', userId, auth, orderCtrl.getAllOrders);
 
 module.exports = router;

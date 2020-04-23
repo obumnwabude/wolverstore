@@ -56,3 +56,9 @@ exports.createOrder = async (req, res, next) => {
       order: order 
     })).catch(error => res.status(500).json(error));
 };
+
+exports.getAllOrders = (req, res, next) => {
+  Order.find({'customer.email': res.locals.user.email})
+    .then(orders => res.status(200).json({orders: orders}))
+    .catch(error => res.status(500).json(error));
+};

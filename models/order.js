@@ -8,7 +8,7 @@ const customerSchema = {
   email: String
 };
 
-module.exports = mongoose.model(new mongoose.Schema({
+module.exports = mongoose.model('Order', new mongoose.Schema({
   cartId: {type: mongoose.Schema.Types.ObjectId, ref: 'Cart', required: true},
   referenceId: {type: String, required: true},
   customer: customerSchema,
