@@ -62,3 +62,7 @@ exports.getAllOrders = (req, res, next) => {
     .then(orders => res.status(200).json({orders: orders}))
     .catch(error => res.status(500).json(error));
 };
+
+exports.getOrder = (req, res, next) => {
+  res.status(200).json({order: res.locals.order});
+};
