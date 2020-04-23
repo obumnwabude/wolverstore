@@ -66,3 +66,43 @@ exports.getAllOrders = (req, res, next) => {
 exports.getOrder = (req, res, next) => {
   res.status(200).json({order: res.locals.order});
 };
+
+exports.updateOrder = (req, res, next) => {
+  // NOTE: Only the shippingAddress, paid and status attributes can be updated in an order
+
+  // check if none of the above where provided, return if so
+  if (!(req.body.shippingAddress || req.body.paid || req.body.status)) 
+    return res.status(401).json({message: 'Please provide a shippingAddress, paid or status to update with'});
+
+  // get the order to be updated from res.locals
+  const order = res.locals.order;
+
+  // ensure paid is boolean else return 
+  if (req.body.paid) {
+    if ('boolean' == typeof req.body.paid) {
+      order.paid = req.body.paid
+    } else {
+      return res.status(401).json({message: 'paid must be true or false'});
+    }
+  }
+
+  // ensure status is one of the enum strings 
+  if (req.body.status) {
+    if (req.body.status === 'Sent' || req.body.status === 'In-transit' || req.body.status === 'Delivered') {
+      order.status = req.body.status;
+    } else {
+      return res.status(401).json({message: "status on order can only be 'Sent', 'In-transit' or 'Delivered'"});
+    }
+  }
+
+  // update shippingAddress if available 
+  if (req.body.shippingAddress) order.shippingAddress = req.body.shippingAddress;
+
+  // save and return order
+  order.save().then(updated => {
+    res.status(201).json({
+      message: 'Update Successful',
+      order: updated
+    });
+  }).catch(error => res.status(500).json(error));
+};

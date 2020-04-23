@@ -9,5 +9,6 @@ const orderId = require('../middleware/order-id');
 router.post('/', cartId, userId, auth, orderCtrl.createOrder);
 router.get('/', userId, auth, orderCtrl.getAllOrders);
 router.get('/:id', orderId, userId, auth, orderCtrl.getOrder);
+router.put('/:id', orderId, userId, auth, orderCtrl.updateOrder);
 
 module.exports = router;
