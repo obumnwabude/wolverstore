@@ -91,3 +91,9 @@ exports.updateReview = (req, res, next) => {
       review: updated
     })).catch(error => res.status(500).json(error));
 };
+
+exports.deleteReview = (req, res, next) => {
+  res.locals.review.delete()
+    .then(() => res.status(204).end())
+    .catch(error => res.status(500).json(error));
+};
