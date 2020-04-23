@@ -55,6 +55,6 @@ module.exports = (req, res, next) => {
     // add the products array to res.locals
     res.locals.products = products;
     // pass execution to next function
-    (new Promise(resolve => setTimeout(resolve, 5000))).then(next);
+    (new Promise(resolve => setTimeout(resolve, 6500))).then(next);
   }
 };
