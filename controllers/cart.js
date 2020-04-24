@@ -6,6 +6,11 @@ exports.createCart = (req, res, next) => {
   const store = res.locals.store;
   const products = res.locals.products;
 
+  // ensure only normal users can create carts else return 
+  if (user.userType !== 'USER') {
+    return res.status(401).json({message: 'Only normal users can create carts'});
+  }
+
   // get return products
   const returnProducts = [];
   products.forEach(product => returnProducts.push({

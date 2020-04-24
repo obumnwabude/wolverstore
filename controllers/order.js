@@ -10,6 +10,11 @@ exports.createOrder = async (req, res, next) => {
   const cart = res.locals.cart;
   const user = res.locals.user;
 
+  // ensure only normal users can make orders else return 
+  if (user.userType !== 'USER') {
+    return res.status(401).json({message: 'Only normal users can make orders'});
+  }
+
   // retrieve store from database to get store name
   let store;
   try {
