@@ -33,7 +33,7 @@ exports.createReview = (req, res, next) => {
     if ('boolean' == typeof req.body.verified) {
       review.verified = req.body.verified
     } else {
-      return res.status(401).json({message: 'paid must be true or false'});
+      return res.status(401).json({message: 'verified must be true or false'});
     }
   }
 
@@ -80,7 +80,7 @@ exports.updateReview = (req, res, next) => {
     if ('boolean' == typeof req.body.verified) {
       review.verified = req.body.verified
     } else {
-      return res.status(401).json({message: 'paid must be true or false'});
+      return res.status(401).json({message: 'verified must be true or false'});
     }
   }
 
