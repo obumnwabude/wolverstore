@@ -114,7 +114,7 @@ exports.updateStore = async (req, res, next) => {
 exports.deleteStore = (req, res, next) => {
   // ensure that no product is found in this store
   Product.find({}).then(products => {
-    if ((products.filter(product.storeId.toString() === res.locals.store._id.toString())).length > 0) {
+    if ((products.filter(product => product.storeId.toString() === res.locals.store._id.toString())).length > 0) {
       return res.status(400).json({
         message: 'Cannot delete this store because they own some products. To delete this store, first delete their products or transfer them to other stores.'
       });
