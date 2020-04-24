@@ -30,7 +30,13 @@ exports.createUser = (req, res, next) => {
           return res.status(401).json({message: 'userType can only be \'USER\' or \'ADMIN\''});
         }
       }
-      if (req.body.verified) user.verified = req.body.verified;
+      if (req.body.verified) {
+        if ('boolean' == typeof req.body.verified) {
+          user.verified = req.body.verified
+        } else {
+          return res.status(401).json({message: 'verified must be true or false'});
+        }
+      }
       // save and return the user
       user.save()
         .then(() => res.status(201).json({
@@ -132,7 +138,13 @@ exports.updateUser = async (req, res, next) => {
       return res.status(401).json({message: 'userType can only be \'USER\' or \'ADMIN\''});
     }
   }
-  if (req.body.verified) user.verified = req.body.verified;
+  if (req.body.verified) {
+    if ('boolean' == typeof req.body.verified) {
+      user.verified = req.body.verified
+    } else {
+      return res.status(401).json({message: 'verified must be true or false'});
+    }
+  }
   if (req.body.addresses) user.addresses = user.addresses.concat(req.body.addresses);
 
   
