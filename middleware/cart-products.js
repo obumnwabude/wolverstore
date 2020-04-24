@@ -15,42 +15,45 @@ module.exports = (req, res, next) => {
   else {
     // create new array of products for reference after iteration
     const products = [];
+    // indicates if it is an update with remove command 
+    const remove = req.method == 'PUT' && req.body.command == 'REMOVE';
     // iterate over products 
     req.body.products.forEach((product, index) => {
       let position = index == 0 ? 'st' : index == 1 ? 'nd' : index == 2 ? 'rd' : 'th';
-      // ensure there is quantity attached to the product, else return
-      if (!(product.quantity)) 
-        return res.status(401).json({
-          message: `The ${index + 1}${position} product of the products array in request body does not have a quantity. Please provide a numeric quantity to each product`
-        });
-      else if (isNaN(product.quantity))
-        return res.status(401).json({
-          message: `The quantity of ${index + 1}${position} product of the products array in request body is not a number. Please ensure that the quantity of each product is a number`
-        });
-      else if (product.quantity < 1)
-        return res.status(401).json({
-          message: `The quantity of ${index + 1}${position} product of the products array in request body is less than one. Please ensure that the quantity of each product is at least one.`
-        });
-      else {
-        const quantity = product.quantity;
-        // retrieve products in database
-        Product.findOne({_id: product._id})
-          .then(product => {
-            // if no product was found return 
-            if (!product) {
-              return res.status(400).json({message: `The ${index + 1}${position} product of the products array in request body with _id: ${product._id} was not found.`});
-            } else {
-              // add quantity to the product
-              product.quantity = quantity;
-              // save the product to the return array of products
-              products.push(product);
-            }
-          }).catch(error => {
-            if (error.name === 'CastError') 
-              return res.status(400).json({message: `Invalid Product _id: ${product._id} at the ${index + 1}${position} product of the products array in request body`});
-            return res.status(500).json(error);
+      // ignore quantity if it is an update to products with remove
+      if (!remove) {  
+        // ensure there is quantity attached to the product, else return
+        if (!(product.quantity)) 
+          return res.status(401).json({
+            message: `The ${index + 1}${position} product of the products array in request body does not have a quantity. Please provide a numeric quantity to each product`
           });
+        else if (isNaN(product.quantity))
+          return res.status(401).json({
+            message: `The quantity of ${index + 1}${position} product of the products array in request body is not a number. Please ensure that the quantity of each product is a number`
+          });
+        else if (product.quantity < 1)
+          return res.status(401).json({
+            message: `The quantity of ${index + 1}${position} product of the products array in request body is less than one. Please ensure that the quantity of each product is at least one.`
+          });
+        else quantity = product.quantity;
       }
+      // retrieve products in database
+      Product.findOne({_id: product._id})
+        .then(product => {
+          // if no product was found return 
+          if (!product) {
+            return res.status(400).json({message: `The ${index + 1}${position} product of the products array in request body with _id: ${product._id} was not found.`});
+          } else {
+            // add quantity to the product if its not remove
+            if (!remove) product.quantity = quantity;
+            // save the product to the return array of products
+            products.push(product);
+          }
+        }).catch(error => {
+          if (error.name === 'CastError') 
+            return res.status(400).json({message: `Invalid Product _id: ${product._id} at the ${index + 1}${position} product of the products array in request body`});
+          return res.status(500).json(error);
+        });
     });
     // add the products array to res.locals
     res.locals.products = products;
