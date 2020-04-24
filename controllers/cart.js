@@ -38,7 +38,7 @@ exports.getCart = (req, res, next) => {
   res.status(200).json(res.locals.cart);
 };
 
-exports.updateCart = (req, res, next) => {
+exports.updateCart = async (req, res, next) => {
   // NOTE: ownership of cart cannot be changed, instead create a new cart with the same products
 
   // get products and cart from res.locals set in middleware
@@ -46,15 +46,13 @@ exports.updateCart = (req, res, next) => {
   const products = res.locals.products;
 
   /*
-    if an command with remove action is detected in the body then products of detected _ids are removed accordingly
-    the expected Schema for command is 
-    command: { action: String, product: _id} 
-    if action is 'EMPTY', then the cart is emptyied, send an empty array in products
-    if action is 'REMOVE', then the products with _id is removed
-    if action is 'ADD', then the products in request body are added to this cart
+    if a command with remove action is detected in the body then the update is according to the comand
+    if comand is 'EMPTY', then the cart is emptyied, send an empty array in products in request body
+    if comand is 'REMOVE', then the products array should contain an object with the _id of the product to be removed
+    if comand is 'ADD', then the products and quantities in request body are added to this cart
   */
   if (req.body.command) {
-    switch (req.body.command.action) {
+    switch (req.body.command) {
       case 'EMPTY':
         cart.products = [];
         break;
@@ -70,10 +68,10 @@ exports.updateCart = (req, res, next) => {
         cart.products = cart.products.concat(addProducts);
         break;
       case 'REMOVE':
-        Cart.update({_id: cart._id}, {"$pull": {"products": {"_id": req.body.command.product._id}}}, 
+        Cart.update({_id: cart._id}, {"$pull": {"products": {"_id": req.body.products[0]._id}}}, 
             {safe: true, multi: true})
           .then(updated => {
-            return res.status(201).json({message: 'Update Successful', cart: updated})
+            return res.status(201).json({message: 'Update Successful', cart: updated});
           }).catch(error => res.status(500).json(error));
         break;
       default: 
