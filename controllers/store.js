@@ -1,5 +1,6 @@
 const Store = require('../models/store');
 const User = require('../models/user');
+const Product = require('../models/product');
 
 exports.getAllStores = (req, res, next) => {
   Store.find({})
@@ -111,7 +112,17 @@ exports.updateStore = async (req, res, next) => {
 };
 
 exports.deleteStore = (req, res, next) => {
-  res.locals.store.delete()
-    .then(() => res.status(204).end())
-    .catch(error => res.status(500).json(error));
+  // ensure that no product is found in this store
+  Product.find({}).then(products => {
+    if ((products.filter(product.storeId.toString() === res.locals.store._id.toString())).length > 0) {
+      return res.status(400).json({
+        message: 'Cannot delete this store because they own some products. To delete this store, first delete their products or transfer them to other stores.'
+      });
+    } else {
+      // delete store
+      res.locals.store.delete()
+        .then(() => res.status(204).end())
+        .catch(error => res.status(500).json(error));
+    }
+  }).catch(error => res.status(500).json(error));  
 };
