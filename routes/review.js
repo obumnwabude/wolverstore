@@ -4,6 +4,7 @@ const auth = require('../middleware/auth');
 const userId = require('../middleware/user-id');
 const storeId = require('../middleware/store-id');
 const productId = require('../middleware/product-id');
+const reviewId = require('../middleware/review-id');
 
 router.post('/', userId, productId, storeId, auth, reviewCtrl.createReview);
 router.get('/', userId, auth, reviewCtrl.getAllReviews);
