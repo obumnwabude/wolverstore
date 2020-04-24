@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 module.exports = new mongoose.Schema({
   street: String,
-  state: Number, 
+  state: String, 
   city: String, 
   zipcode: String, 
   country: String

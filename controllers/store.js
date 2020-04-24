@@ -30,7 +30,7 @@ exports.createStore = (req, res, next) => {
     description: req.body.description || '',
     address: req.body.address || {
       street: '',
-      state: 1, 
+      state: '', 
       city: '', 
       zipcode: '', 
       country: ''
